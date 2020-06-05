@@ -1,4 +1,6 @@
 /* eslint-disable no-bitwise */
+import Utility from './Utility';
+
 export default class FrameBuffer32 {
   constructor(width = 320, height = 240) {
     const colorDepth = 4;
@@ -22,6 +24,10 @@ export default class FrameBuffer32 {
 
   getBufferView() {
     return this.bufferView;
+  }
+
+  clear(r, g, b, a) {
+    this.bufferView.fill(Utility.ConvertRGBAToData(r, g, b, a));
   }
 
   setPixel(pixelIndex, r, g, b, a = 255) {

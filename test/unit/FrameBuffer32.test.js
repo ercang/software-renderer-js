@@ -1,6 +1,6 @@
 
-/* eslint-disable no-bitwise */
 import FrameBuffer32 from '../../src/FrameBuffer32';
+import Utility from '../../src/Utility';
 
 describe('FrameBuffer32 tests', () => {
   test('frame buffer constructor and getters', () => {
@@ -12,6 +12,17 @@ describe('FrameBuffer32 tests', () => {
     expect(fb.getBufferView().byteLength).toBe(20 * 10 * 4);
   });
 
+  test('frame buffer clear', () => {
+    const w = 5;
+    const h = 1;
+    const fb = new FrameBuffer32(w, h);
+    fb.clear(10, 20, 30, 40);
+    const pixelData = Utility.ConvertRGBAToData(10, 20, 30, 40);
+    for (let i = 0; i < w; i++) {
+      expect(fb.getPixelDataXY(i, 0)).toBe(pixelData);
+    }
+  });
+
   test('frame buffer set/get pixels', () => {
     const w = 10;
     const h = 20;
@@ -21,7 +32,7 @@ describe('FrameBuffer32 tests', () => {
     const pixelIndex = y * w + x;
     fb.setPixel(pixelIndex, 10, 20, 30);
     const pixelData = fb.getPixelData(pixelIndex);
-    expect(pixelData).toBe(((255 << 24) | (30 << 16) | (20 << 8) | 10) >>> 0);
+    expect(pixelData).toBe(Utility.ConvertRGBAToData(10, 20, 30, 255));
   });
 
   test('frame buffer set/get pixels by xy', () => {
@@ -30,10 +41,10 @@ describe('FrameBuffer32 tests', () => {
     const y = 5;
     fb.setPixelXY(x, y, 10, 20, 30, 50);
     let pixelData = fb.getPixelDataXY(x, y);
-    expect(pixelData).toBe((50 << 24) | (30 << 16) | (20 << 8) | 10);
+    expect(pixelData).toBe(Utility.ConvertRGBAToData(10, 20, 30, 50));
     fb.setPixelXY(x, y, 10, 20, 30);
     pixelData = fb.getPixelDataXY(x, y);
-    expect(pixelData).toBe(((255 << 24) | (30 << 16) | (20 << 8) | 10) >>> 0);
+    expect(pixelData).toBe(Utility.ConvertRGBAToData(10, 20, 30, 255));
   });
 
   test('frame buffer set pixel data', () => {

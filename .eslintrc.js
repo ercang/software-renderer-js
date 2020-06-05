@@ -17,4 +17,12 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
+  rules: {
+    'linebreak-style': [
+      'error',
+      'unix'
+    ],
+    'max-len': 'off',
+    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }]
+  }
 };
