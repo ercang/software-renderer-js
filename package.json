@@ -1,0 +1,44 @@
+{
+  "name": "software-renderer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "test": "jest",
+    "lint": "eslint src/. && eslint test/.",
+    "fix": "eslint --fix src/. && eslint --fix test/unit/.",
+    "coverage": "jest --coverage"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run coverage"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ercang/software-renderer-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ercang/software-renderer-js/issues"
+  },
+  "homepage": "https://github.com/ercang/software-renderer-js#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-stage-2": "^7.8.3",
+    "babel-loader": "^8.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.13.2",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
