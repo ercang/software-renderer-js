@@ -133,3 +133,47 @@ describe('Painter draw triangle tests', () => {
     expect(p.drawLine).toHaveBeenNthCalledWith(3, x3, y3, x1, y1, 255, 255, 255);
   });
 });
+
+describe('Painter fill triangle tests', () => {
+  test('Painter fill triangle', () => {
+    const fbMock = { fillLine: jest.fn() };
+    const p = new Painter(fbMock);
+    p.fillTriangle(
+      2, 1,
+      1, 2,
+      3, 3,
+    );
+    expect(fbMock.fillLine).toBeCalledTimes(4);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(1, 2, 2, 1, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(2, 1, 2, 2, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(3, 1, 3, 2, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(3, 1, 3, 2, 255, 255, 255, 255);
+  });
+
+  test('Painter fill triangle, different order', () => {
+    const fbMock = { fillLine: jest.fn() };
+    const p = new Painter(fbMock);
+    p.fillTriangle(
+      3, 3,
+      1, 2,
+      -2, 1,
+    );
+    expect(fbMock.fillLine).toBeCalledTimes(3);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(1, -2, -2, 1, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(2, 0, 1, 2, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(3, 3, 1, 3, 255, 255, 255, 255);
+  });
+
+  test('Painter fill horizontal triangle', () => {
+    const fbMock = { fillLine: jest.fn() };
+    const p = new Painter(fbMock);
+    p.fillTriangle(
+      2, 1,
+      1, 1,
+      3, 1,
+    );
+    expect(fbMock.fillLine).toBeCalledTimes(2);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(1, 2, 2, 1, 255, 255, 255, 255);
+    expect(fbMock.fillLine).toHaveBeenNthCalledWith(2, 1, 2, 1, 255, 255, 255, 255);
+  });
+});

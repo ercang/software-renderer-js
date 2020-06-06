@@ -30,6 +30,22 @@ export default class FrameBuffer32 {
     this.bufferView.fill(Utility.ConvertRGBAToData(r, g, b, a));
   }
 
+  fillLine(x1, x2, y, r, g, b, a) {
+    if (y < 0 || y >= this.height) {
+      return;
+    }
+
+    if (x1 >= this.width - 1 || x2 < 0) {
+      return;
+    }
+
+    x2 = x2 >= this.width ? this.width : x2;
+    x1 = x1 < 0 ? 0 : x1;
+    const start = y * this.width + x1;
+    const len = x2 - x1;
+    this.bufferView.fill(Utility.ConvertRGBAToData(r, g, b, a), start, start + len);
+  }
+
   setPixel(pixelIndex, r, g, b, a = 255) {
     this.bufferView[pixelIndex] = (a << 24) // alpha
       | (b << 16) // blue

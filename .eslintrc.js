@@ -25,6 +25,6 @@ module.exports = {
     'max-len': 'off',
     'no-bitwise': 'off',
     'no-param-reassign': 'off',
-    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }]
+    'no-plusplus': 'off',
   }
 };
