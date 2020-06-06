@@ -1,5 +1,3 @@
-
-/* eslint-disable no-bitwise */
 import Utility from '../../src/Utility';
 
 describe('Utility tests', () => {

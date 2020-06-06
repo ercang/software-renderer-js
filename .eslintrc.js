@@ -23,6 +23,8 @@ module.exports = {
       'unix'
     ],
     'max-len': 'off',
+    'no-bitwise': 'off',
+    'no-param-reassign': 'off',
     'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }]
   }
 };

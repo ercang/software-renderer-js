@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import Utility from './Utility';
 
 export default class FrameBuffer32 {
