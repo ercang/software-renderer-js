@@ -13,15 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
   painter.clear();
 
   // update screen?
-  const d = new Date() / 1000;
+  const d = new Date() / 500;
+  const d2 = new Date() / 500 + 0.6;
   const s = Math.sin(d);
   const c = Math.cos(d);
+  const s2 = Math.sin(d2);
+  const c2 = Math.cos(d2);
   const x1 = 160;
-  const x2 = 160 + 60 * s;
+  const x2 = 160 + 90 * s;
   const y1 = 120;
-  const y2 = 120 + 60 * c;
+  const y2 = 120 + 90 * c;
+  const x3 = 160 + 90 * s2;
+  const y3 = 120 + 90 * c2;
   // console.log(x1,y1,x2,y2); // eslint-disable-line
-  painter.drawLine(x1, y1, x2, y2, 255, 0, 0);
+  painter.drawTriangle(x1, y1, x2, y2, x3, y3, 255 * ((c + 1) / 2), 255 * ((s + 1) / 2), 0);
   // painter.drawLine(160, 120, 100, 100);
   // painter.drawLine(100, 100, 160, 120);
 

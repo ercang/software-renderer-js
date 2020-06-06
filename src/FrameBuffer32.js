@@ -5,7 +5,8 @@ export default class FrameBuffer32 {
     const colorDepth = 4;
     this.width = width;
     this.height = height;
-    this.buffer = new ArrayBuffer(width * height * colorDepth);
+    this.bufferSize = width * height * colorDepth;
+    this.buffer = new ArrayBuffer(this.bufferSize);
     this.bufferView = new Uint32Array(this.buffer);
   }
 
@@ -37,11 +38,13 @@ export default class FrameBuffer32 {
   }
 
   setPixelXY(x, y, r, g, b, a = 255) {
-    const pixelIndex = y * this.width + x;
-    this.bufferView[pixelIndex] = (a << 24) // alpha
-      | (b << 16) // blue
-      | (g << 8) // green
-      | r; // red
+    if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+      const pixelIndex = y * this.width + x;
+      this.bufferView[pixelIndex] = (a << 24) // alpha
+        | (b << 16) // blue
+        | (g << 8) // green
+        | r; // red
+    }
   }
 
   setPixelData(pixelIndex, data) {
@@ -49,8 +52,10 @@ export default class FrameBuffer32 {
   }
 
   setPixelDataXY(x, y, data) {
-    const pixelIndex = y * this.width + x;
-    this.bufferView[pixelIndex] = data;
+    if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+      const pixelIndex = y * this.width + x;
+      this.bufferView[pixelIndex] = data;
+    }
   }
 
   getPixelData(pixelIndex) {

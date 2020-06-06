@@ -84,4 +84,10 @@ export default class Painter {
       }
     }
   }
+
+  drawTriangle(x1, y1, x2, y2, x3, y3, r = 255, g = 255, b = 255) {
+    this.drawLine(x1, y1, x2, y2, r, g, b);
+    this.drawLine(x2, y2, x3, y3, r, g, b);
+    this.drawLine(x3, y3, x1, y1, r, g, b);
+  }
 }

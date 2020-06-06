@@ -47,6 +47,15 @@ describe('FrameBuffer32 tests', () => {
     expect(pixelData).toBe(Utility.ConvertRGBAToData(10, 20, 30, 255));
   });
 
+  test('frame buffer set/get pixels by xy out of bounds', () => {
+    const fb = new FrameBuffer32(10, 20);
+    const x = 20;
+    const y = 50;
+    fb.setPixelXY(x, y, 10, 20, 30, 50);
+    const pixelData = fb.getPixelDataXY(x, y);
+    expect(pixelData).toBe(undefined);
+  });
+
   test('frame buffer set pixel data', () => {
     const w = 10;
     const h = 20;
@@ -63,5 +72,16 @@ describe('FrameBuffer32 tests', () => {
     const pixelIndex2 = y2 * w + x2;
     const pixelData2 = fb.getPixelData(pixelIndex2);
     expect(pixelData2).toBe(400);
+  });
+
+  test('frame buffer set pixel data out of bounds', () => {
+    const w = 10;
+    const h = 20;
+    const fb = new FrameBuffer32(w, h);
+    const x = 10;
+    const y = 20;
+    fb.setPixelDataXY(x, y, 200);
+    const pixelData = fb.getPixelDataXY(x, y);
+    expect(pixelData).toBe(undefined);
   });
 });

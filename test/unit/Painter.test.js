@@ -61,6 +61,17 @@ describe('Painter line drawing tests', () => {
     expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(4, 3, 0, 255, 255, 255);
   });
 
+  test('Painter draw almost horizontal line test 3', () => {
+    const fbMock = { setPixelXY: jest.fn() };
+    const p = new Painter(fbMock);
+    p.drawLine(3, 1, 0, 0);
+    expect(fbMock.setPixelXY).toBeCalledTimes(4);
+    expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(1, 0, 0, 255, 255, 255);
+    expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(2, 1, 0, 255, 255, 255);
+    expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(3, 2, 1, 255, 255, 255);
+    expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(4, 3, 1, 255, 255, 255);
+  });
+
   test('Painter draw vertical line test', () => {
     const fbMock = { setPixelXY: jest.fn() };
     const p = new Painter(fbMock);
@@ -101,5 +112,24 @@ describe('Painter line drawing tests', () => {
     expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(2, 1, 1, 100, 100, 100);
     expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(3, 0, 2, 100, 100, 100);
     expect(fbMock.setPixelXY).toHaveBeenNthCalledWith(4, 0, 3, 100, 100, 100);
+  });
+});
+
+describe('Painter draw triangle tests', () => {
+  test('Painter draw triangle', () => {
+    const fbMock = { setPixelXY: jest.fn() };
+    const p = new Painter(fbMock);
+    p.drawLine = jest.fn(); // mock draw line
+    const x1 = 10;
+    const y1 = 11;
+    const x2 = 20;
+    const y2 = 21;
+    const x3 = 30;
+    const y3 = 31;
+    p.drawTriangle(x1, y1, x2, y2, x3, y3);
+    expect(p.drawLine).toBeCalledTimes(3);
+    expect(p.drawLine).toHaveBeenNthCalledWith(1, x1, y1, x2, y2, 255, 255, 255);
+    expect(p.drawLine).toHaveBeenNthCalledWith(2, x2, y2, x3, y3, 255, 255, 255);
+    expect(p.drawLine).toHaveBeenNthCalledWith(3, x3, y3, x1, y1, 255, 255, 255);
   });
 });
