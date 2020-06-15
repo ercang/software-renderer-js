@@ -31,6 +31,12 @@ export default class FrameBuffer32 {
   }
 
   fillLine(x1, x2, y, r, g, b, a) {
+    if(x1 > x2) {
+      const t = x2;
+      x2 = x1;
+      x1 = t;
+    }
+
     if (y < 0 || y >= this.height) {
       return;
     }

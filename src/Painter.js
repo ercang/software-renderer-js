@@ -149,6 +149,7 @@ export default class Painter {
     if (y3 - y1 > 0) dx2 = (x3 - x1) / (y3 - y1);
     if (y3 - y2 > 0) dx3 = (x3 - x2) / (y3 - y2);
 
+
     // S=E=A;
     let sx = x1;
     let sy = y1;
@@ -173,24 +174,24 @@ export default class Painter {
       }
     */
     if (dx1 > dx2) {
-      for (; sy <= y2; sy++, ey++, sx += dx2, ex += dx1) {
+      for (; sy < y2; sy++, ey++, sx += dx2, ex += dx1) {
         // horizline(S.x,E.x,S.y,color);
         this.fb.fillLine(sx | 0, ex | 0, sy | 0, r, g, b, 255);
       }
       ex = x2;
       ey = y2;
-      for (; sy <= y3; sy++, ey++, sx += dx2, ex += dx3) {
+      for (; sy < y3; sy++, ey++, sx += dx2, ex += dx3) {
         // horizline(S.x,E.x,S.y,color);
         this.fb.fillLine(sx | 0, ex | 0, sy | 0, r, g, b, 255);
       }
     } else {
-      for (; sy <= y2; sy++, ey++, sx += dx1, ex += dx2) {
+      for (; sy < y2; sy++, ey++, sx += dx1, ex += dx2) {
         // horizline(S.x,E.x,S.y,color);
         this.fb.fillLine(sx | 0, ex | 0, sy | 0, r, g, b, 255);
       }
       sx = x2;
       sy = y2;
-      for (; sy <= y3; sy++, ey++, sx += dx3, ex += dx2) {
+      for (; sy < y3; sy++, ey++, sx += dx3, ex += dx2) {
         // horizline(S.x,E.x,S.y,color);
         this.fb.fillLine(sx | 0, ex | 0, sy | 0, r, g, b, 255);
       }

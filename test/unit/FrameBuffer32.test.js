@@ -37,6 +37,16 @@ describe('FrameBuffer32 tests', () => {
       expect(fb.getPixelDataXY(i, y)).toBe(data);
     }
 
+    // fill reverse
+    y = 4;
+    fillStart = 20;
+    fillEnd = 5;
+    fb.fillLine(fillStart, fillEnd, y, 10, 20, 30, 40);
+    for (let i = 0; i < w; i++) {
+      const data = (i >= fillEnd && i < fillStart) ? pixelData : 0;
+      expect(fb.getPixelDataXY(i, y)).toBe(data);
+    }
+
     // fill more than width
     y = 2;
     fillStart = -1;
