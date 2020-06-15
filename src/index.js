@@ -91,7 +91,7 @@ function onUpdate(painter) {
     // Rasterize triangle
     painter.fillTriangle(triProjected.p[0].x, triProjected.p[0].y,
       triProjected.p[1].x, triProjected.p[1].y,
-      triProjected.p[2].x, triProjected.p[2].y, 10*index % 255, 5*index*index % 255, 2*index*index % 255);
+      triProjected.p[2].x, triProjected.p[2].y, 10 * index % 255, 5 * index * index % 255, 2 * index * index % 255);
   });
 }
 
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     painter.clear();
 
     onUpdate(painter);
-    //painter.fillTriangle(10, 10,100, 10,200, 200, 255,255,255);
+    // painter.fillTriangle(10, 10,100, 10,200, 200, 255,255,255);
 
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
