@@ -4,12 +4,15 @@ import FrameBuffer32 from './FrameBuffer32';
 import cube from './mesh/Cube';
 import Mat4x4 from './Mat4x4';
 import Triangle from './Triangle';
+import Vector3 from './Vector3';
 
 const screenWidth = 320;
 const screenHeight = 240;
 
 const matProj = new Mat4x4();
 let fTheta = 0;
+
+const vCamera = new Vector3();
 
 // initialize projection matrix
 const fNear = 0.1;
@@ -47,8 +50,9 @@ function onUpdate(painter) {
   matRotX.m[2][2] = Math.cos(fTheta * 0.5);
   matRotX.m[3][3] = 1;
 
-  // draw triangles
-  cube.triangles.forEach((tri, index) => {
+  const trianglesToDraw = [];
+  // project triangles
+  cube.triangles.forEach((tri) => {
     const triProjected = new Triangle();
     const triRotatedZ = new Triangle();
     const triRotatedZX = new Triangle();
@@ -69,29 +73,64 @@ function onUpdate(painter) {
     triTranslated.p[1].z = triRotatedZX.p[1].z + 3.0;
     triTranslated.p[2].z = triRotatedZX.p[2].z + 3.0;
 
-    // Project triangles from 3D --> 2D
-    triProjected.p[0] = matProj.multiplyVector(triTranslated.p[0]);
-    triProjected.p[1] = matProj.multiplyVector(triTranslated.p[1]);
-    triProjected.p[2] = matProj.multiplyVector(triTranslated.p[2]);
+    // Use Cross-Product to get surface normal
+    const line1 = new Vector3(triTranslated.p[1].x - triTranslated.p[0].x, triTranslated.p[1].y - triTranslated.p[0].y, triTranslated.p[1].z - triTranslated.p[0].z);
+    const line2 = new Vector3(triTranslated.p[2].x - triTranslated.p[0].x, triTranslated.p[2].y - triTranslated.p[0].y, triTranslated.p[2].z - triTranslated.p[0].z);
+    const normal = line1.cross(line2).normalize();
 
-    // Scale into view
-    triProjected.p[0].x += 1.0;
-    triProjected.p[0].y += 1.0;
-    triProjected.p[1].x += 1.0;
-    triProjected.p[1].y += 1.0;
-    triProjected.p[2].x += 1.0;
-    triProjected.p[2].y += 1.0;
-    triProjected.p[0].x *= 0.5 * screenWidth;
-    triProjected.p[0].y *= 0.5 * screenHeight;
-    triProjected.p[1].x *= 0.5 * screenWidth;
-    triProjected.p[1].y *= 0.5 * screenHeight;
-    triProjected.p[2].x *= 0.5 * screenWidth;
-    triProjected.p[2].y *= 0.5 * screenHeight;
+    if (normal.x * (triTranslated.p[0].x - vCamera.x)
+        + normal.y * (triTranslated.p[0].y - vCamera.y)
+        + normal.z * (triTranslated.p[0].z - vCamera.z) < 0.0) {
+      // Project triangles from 3D --> 2D
+      triProjected.p[0] = matProj.multiplyVector(triTranslated.p[0]);
+      triProjected.p[1] = matProj.multiplyVector(triTranslated.p[1]);
+      triProjected.p[2] = matProj.multiplyVector(triTranslated.p[2]);
 
-    // Rasterize triangle
-    painter.fillTriangle(triProjected.p[0].x, triProjected.p[0].y,
-      triProjected.p[1].x, triProjected.p[1].y,
-      triProjected.p[2].x, triProjected.p[2].y, 10 * index % 255, 5 * index * index % 255, 2 * index * index % 255);
+      // Scale into view
+      triProjected.p[0].x += 1.0;
+      triProjected.p[0].y += 1.0;
+      triProjected.p[1].x += 1.0;
+      triProjected.p[1].y += 1.0;
+      triProjected.p[2].x += 1.0;
+      triProjected.p[2].y += 1.0;
+      triProjected.p[0].x *= 0.5 * screenWidth;
+      triProjected.p[0].y *= 0.5 * screenHeight;
+      triProjected.p[1].x *= 0.5 * screenWidth;
+      triProjected.p[1].y *= 0.5 * screenHeight;
+      triProjected.p[2].x *= 0.5 * screenWidth;
+      triProjected.p[2].y *= 0.5 * screenHeight;
+      // console.log("z =>",triProjected.p[0].z,triProjected.p[1].z,triProjected.p[2].z)
+
+      triProjected.normal = normal;
+      trianglesToDraw.push(triProjected);
+
+      // calculate illumination
+      // const lightDir = new Vector3(0, 0, -1).normalize();
+      // const intensity = lightDir.dot(normal);
+
+      // Rasterize triangle
+      /* painter.fillTriangle(triProjected.p[0].x, triProjected.p[0].y,
+        triProjected.p[1].x, triProjected.p[1].y,
+        triProjected.p[2].x, triProjected.p[2].y, 255*intensity, 255*intensity, 255*intensity); */
+    }
+  });
+
+  // sort
+  trianglesToDraw.sort((t1, t2) => {
+    const z1 = (t1.p[0].z + t1.p[1].z + t1.p[2].z) / 3.0;
+    const z2 = (t2.p[0].z + t2.p[1].z + t2.p[2].z) / 3.0;
+    return z1 > z2;
+  });
+
+  // draw
+  trianglesToDraw.forEach((triangle) => {
+    // calculate illumination
+    const lightDir = new Vector3(0, 0, -1).normalize();
+    const intensity = lightDir.dot(triangle.normal);
+
+    painter.fillTriangle(triangle.p[0].x, triangle.p[0].y,
+      triangle.p[1].x, triangle.p[1].y,
+      triangle.p[2].x, triangle.p[2].y, 255 * intensity, 255 * intensity, 255 * intensity);
   });
 }
 
